@@ -12,6 +12,6 @@ db.connect(erro => {
 
         const app = customExpress()
 
-        app.listen(4000, () => console.log("rodando"))
+        app.listen(process.env.PORT || 4000, () => console.log("rodando"))
     }
 })
