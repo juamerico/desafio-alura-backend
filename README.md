@@ -5,6 +5,25 @@
 ## Objetivo
 Projeto desenvolvido durante o Alura Challenges - Back End, com a proposta de criação de uma API seguindo o padrão REST para o recebimento de requisições e armazenamento de informações referentes aos vídeos da plataforma [Aluraflix](https://github.com/alura-cursos/aluraflix-front/tree/semana-1).
 
+### Inserindo novo vídeo no banco de dados
+<sup>desafio-alura-backend/infrastructure/[tables.js](desafio-alura-backend/infrastructure/tables.js)</sup>\
+Os campos obrigatórios no corpo da requisição POST para inserção de novo item no banco de dados são:
+- titulo (*máximo 70 caracteres*)
+- url (*máximo 255 caracteres*)
+- descricao (*máximo 3000 caracteres*)
+
+### Alterando campos de um vídeo no banco de dados
+<sup>desafio-alura-backend/infrastructure/[tables.js](desafio-alura-backend/infrastructure/tables.js)</sup>\
+Os campos e limites de caracteres são os mesmos da requisição POST de inserção, porém neste caso o método a ser utilizado é o PATCH, e os campos são opcionais, e não mais obrigatórios.
+
+### Recebendo todos os vídeos do banco de dados
+<sup>desafio-alura-backend/infrastructure/[tables.js](desafio-alura-backend/infrastructure/tables.js)</sup>\
+Para receber todos os items do banco de dados basta acessar o endpoint **/videos** através de uma requisição do tipo GET.
+
+### Excluindo um vídeo do banco de dados
+<sup>desafio-alura-backend/infrastructure/[tables.js](desafio-alura-backend/infrastructure/tables.js)</sup>\
+Para excluir um item do banco de dados basta enviar uma requisição do tipo DELETE com o endpoint /videos/**id**.
+
 ### Tecnologias utilizadas
 Abaixo são listadas as ferramentas utilizadas na construção do projeto:
 
