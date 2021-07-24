@@ -6,18 +6,16 @@ class Tables {
     }
 
     createVideos() {
-        const urlRegex = new RegExp("[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)", "g")
-
-        const sql = `CREATE TABLE IF NOT EXISTS Videos (id INT NOT NULL AUTO INCREMENT, titulo VARCHAR(70) NOT NULL, descricao TEXT VARCHAR(3000) NOT NULL, url REGEX ${urlRegex})`
+        const sql = `CREATE TABLE IF NOT EXISTS Videos (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, titulo VARCHAR(70) NOT NULL, descricao VARCHAR(3000) NOT NULL, url VARCHAR(255))`
 
         this.connection.query(sql, erro => {
             if(erro) {
                 console.log(erro)
             } else {
-                console.log("Tabela de videos criada com sucesso")
+                console.log("'Videos' table successfully created")
             }
         })
     }
 }
 
-module.exports = Tables
+module.exports = new Tables

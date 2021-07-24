@@ -1,14 +1,14 @@
 const customExpress = require("./config/customExpress")
-const connection = require("./infrastructure/connection")
+const db = require("./infrastructure/dbConnection")
 const Tables = require("./infrastructure/tables")
 
-connection.connect(erro => {
+db.connect(erro => {
     if(erro) {
         console.log(erro)
     } else {
         console.log("Conectado")
 
-        Tables.init(connection)
+        Tables.init(db)
 
         const app = customExpress()
 
