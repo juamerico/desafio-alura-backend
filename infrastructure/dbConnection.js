@@ -10,6 +10,8 @@ const connection = mysql.createConnection({
 
 module.exports = connection
 
+//ClearDB:
 //mysql://b28dba569e9a85:2220acc7@us-cdbr-east-04.cleardb.com/heroku_f13adb82a8f2201?reconnect=true
 
+//JAWSDb:
 //mysql://mwylsvcbcj026b7z:r3fx1aihazlrdne4@kfgk8u2ogtoylkq9.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/d8v6lfvxjgxnf7xj
