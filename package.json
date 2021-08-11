@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "create-tables": "node ./infrastructure/createTables.js"
   },
   "repository": {
     "type": "git",
@@ -18,9 +19,11 @@
   },
   "homepage": "https://github.com/juamerico/desafio-alura-backend#readme",
   "dependencies": {
-    "consign": "^0.1.6",
+    "config": "^3.3.6",
     "express": "^4.17.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.0",
+    "sequelize": "^6.6.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"

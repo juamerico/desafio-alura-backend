@@ -1,0 +1,9 @@
+{
+    "mysql": {
+        "db": "aluraflix",
+        "user": "root",
+        "password": "admin",
+        "host": "127.0.0.1"
+    }
+}
+

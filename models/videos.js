@@ -1,64 +1,36 @@
 const db = require("../infrastructure/dbConnection")
 
 class Video {
-    listItems(res) {
-        const sql = "SELECT * FROM Videos"
-
-        db.query(sql, (err, result) => {
-            if(err) {
-                res.status(400).redirect("https://http.cat/400")
-            } else {
-                res.status(200).json(result)
-            }
-        })
+    constructor(titulo, descricao, url) {
+        this.titulo = titulo
+        this.descricao = descricao
+        this.url = url
     }
 
-    addItem(video, res) {
-        const sql = "INSERT INTO Videos SET ?"
+    listItems() {
 
-        db.query(sql, video, (err) => {
-            if(err) {
-                res.status(400).json(err)
-            } else {
-                res.status(201).json(video)
-            }
-        })
     }
 
-    getItemById(id, res) {
-        const sql = `SELECT * FROM Videos WHERE id=${id}`
-
-        db.query(sql, (err, result) => {
-            if(err || result.length < 1) {
-                res.status(404).redirect("https://http.cat/404")
-            } else {
-                res.status(200).json(result)
-            }
+    async addItem() {
+        const newVideo = await db.create({
+            titulo: this.titulo,
+            descricao: this.descricao,
+            url: this.url
         })
+        this.id = newVideo.id
+        return newVideo
     }
 
-    updateItem(id, values, res) {
-        const sql = `UPDATE Videos SET ? WHERE id=${id}`
-
-        db.query(sql, values, (err) => {
-            if(err) {
-                res.status(400).json(err)
-            } else {
-                res.status(200).json({...values, id})
-            }
-        })
+    getItemById() {
+        
     }
 
-    deleteItem(id, res) {
-        const sql = `DELETE FROM Videos WHERE id=${id}`
+    updateItem() {
+        
+    }
 
-        db.query(sql, (err) => {
-            if(err) {
-                res.status(400).json(err)
-            } else {
-                res.status(200).json(`Item #${id} removido`)
-            }
-        })
+    deleteItem() {
+        
     }
 }
 

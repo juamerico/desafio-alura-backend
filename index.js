@@ -1,17 +1,25 @@
-const customExpress = require("./config/customExpress")
-const db = require("./infrastructure/dbConnection")
-const Tables = require("./infrastructure/tables")
+const express = require("express")
+const app = express()
 
-db.connect(erro => {
-    if(erro) {
-        console.log(erro)
-    } else {
-        console.log("Conectado")
+app.use(express.json())
 
-        Tables.init(db)
+const categoryRouter = require("./controllers/categorias")
+const InvalidData = require("./models/errors/InvalidData")
+const MissingData = require("./models/errors/MissingData")
 
-        const app = customExpress()
+app.use("/api/categorias", categoryRouter)
 
-        app.listen(process.env.PORT || 4000, () => console.log("rodando"))
+app.use((err, req, res, next) => {
+    let status = 404
+
+    if(err instanceof InvalidData || err instanceof MissingData) {
+        status = 400
     }
+
+    res.status(status)
+    res.send(JSON.stringify({error: err.message}))
+    console.log(err.message)
 })
+
+const port = process.env.PORT || 4000
+app.listen(port, () => console.log(`Rodando na porta http://localhost:${port}`))
