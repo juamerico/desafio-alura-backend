@@ -4,9 +4,9 @@ const MissingData = require("./errors/MissingData")
 const NotFound = require("./errors/NotFound")
 
 class Categoria {
-    constructor({id, titulo, cor}) {
+    constructor({id, categoria, cor}) {
         this.id = id
-        this.titulo = titulo
+        this.categoria = categoria
         this.cor = cor
     }
 
@@ -16,7 +16,7 @@ class Categoria {
         if(!loadedFromTable) {
             throw new NotFound(this.id)
         } else {
-            this.titulo = loadedFromTable.titulo
+            this.categoria = loadedFromTable.categoria
             this.cor = loadedFromTable.cor
 
             return loadedFromTable
@@ -27,11 +27,11 @@ class Categoria {
     async create() {
         this.validate()
         const newCategory = await Table.create({
-            titulo: this.titulo,
+            categoria: this.categoria,
             cor: this.cor
         })
         
-        this.titulo = newCategory.titulo
+        this.categoria = newCategory.categoria
         this.cor = newCategory.cor
         this.id = newCategory.id
 
@@ -40,7 +40,7 @@ class Categoria {
 
     async update() {
         await this.validate()
-        const data = {cor: this.cor, titulo: this.titulo}
+        const data = {cor: this.cor, categoria: this.categoria}
         const updatedCategory = await Table.update(data, {where: {id: this.id}})
 
         return updatedCategory
@@ -54,7 +54,7 @@ class Categoria {
     }
 
     validate() {
-        const fields = ["titulo", "cor"]
+        const fields = ["categoria", "cor"]
 
         fields.forEach(field =>  {
             const value = this[field]

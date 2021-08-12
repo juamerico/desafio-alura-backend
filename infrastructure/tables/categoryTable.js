@@ -2,7 +2,7 @@ const Sequelize = require("sequelize")
 const instance = require("../dbConnection")
 
 const columns = {
-    titulo: {
+    categoria: {
         type: Sequelize.STRING,
         allowNull: false
     },
@@ -14,8 +14,8 @@ const columns = {
 
 const settings = {
     freezeTableName: true,
-    tableName: "categorias",
+    tableName: "categoria",
     timeStamps: true,
 }
 
-module.exports = instance.define("categorias", columns, settings)
+module.exports = instance.define("categoria", columns, settings)

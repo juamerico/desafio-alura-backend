@@ -1,6 +1,6 @@
 class NotFound extends Error {
     constructor(id) {
-        super(`Categoria #${id} não disponível para exclusão.`)
+        super(`Categoria #${id} não encontrada.`)
         this.name = "NotFound"
     }
 }

@@ -1,9 +1,10 @@
-//a rota padrão é '/api/categorias/'
+//A rota padrão é '/api/categorias/'
 
 const Categoria = require("../models/categorias")
 const router = require("express").Router()
 const Table = require("../infrastructure/tables/categoryTable")
 
+//Criar nova categoria
 router.post("/", async (req, res, next) => {
     try {
         const categoria = new Categoria(req.body)
@@ -12,11 +13,13 @@ router.post("/", async (req, res, next) => {
         res.send(
             `Categoria criada: ${JSON.stringify(createdCategory)}`
         )
+
     } catch(err) {
         next(err)
     }
 })
 
+//Exibir todas as categorias
 router.get("/", async (req, res) => {
     const categorias = await Table.findAll({raw: true})
     res.status(200)
@@ -25,6 +28,7 @@ router.get("/", async (req, res) => {
     )
 })
 
+//Editar uma categoria por #id
 router.patch("/:id", async (req, res, next) => {
     try{
         const reqBody = req.body
@@ -40,11 +44,13 @@ router.patch("/:id", async (req, res, next) => {
         res.send(
             `Dados atualizados: ${JSON.stringify(categoria)}`
         )
+
     } catch(err) {
         next(err)
     }
 })
 
+//Apagar uma categoria por #id
 router.delete("/:id", async (req, res, next) => {
     try {
         const id = req.params.id
@@ -54,6 +60,7 @@ router.delete("/:id", async (req, res, next) => {
         res.send(
             `Categoria id #${id} removida.`
         )
+
     } catch(err) {
         next(err)
     }
@@ -63,11 +70,10 @@ router.delete("/:id", async (req, res, next) => {
 //
 const videosRouter = require("./videos")
 
+//Middleware para rotas de vídeos
 const categoryCheck = async (req, res, next) => {
     try {
-        const categoria = new Categoria({
-            id: req.params.categoria
-        })
+        const categoria = new Categoria({id: req.params.idCategoria})
         await categoria.load()
         req.categoria = categoria
         next()

@@ -13,17 +13,21 @@ const columns = {
     url: {
         type: Sequelize.STRING,
         allowNull: false
+    },
+    categoria_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: "categoria",
+            key: "id"
+        }
     }
 }
 
 const settings = {
     freezeTableName: true,
-    tableName: "videos",
+    tableName: "video",
     timeStamps: true,
-    references: {
-        model: require("./categoryTable"),
-        key: "id"
-    }
 }
 
-module.exports = instance.define("videos", columns, settings)
+module.exports = instance.define("video", columns, settings)
