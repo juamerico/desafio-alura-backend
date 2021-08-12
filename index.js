@@ -26,5 +26,5 @@ app.use((err, req, res, next) => {
     console.log(err.message)
 })
 
-const port = process.env.PORT || 4000
+const port = 4000
 app.listen(port, () => console.log(`Rodando na porta http://localhost:${port}`))
