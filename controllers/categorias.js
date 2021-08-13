@@ -28,11 +28,25 @@ router.get("/", async (req, res) => {
     )
 })
 
-//Editar uma categoria por #id
-router.patch("/:id", async (req, res, next) => {
+//Exibir uma categoria por #idCategoria
+router.get("/:idCategoria", async (req, res, next) => {
+    try {
+        const categoria = new Categoria({id: req.params.idCategoria})
+        await categoria.load()
+        res.status(200)
+        res.send(
+            JSON.stringify(categoria)
+        )
+    } catch(err) {
+        next(err)
+    }
+})
+
+//Editar uma categoria por #idCategoria
+router.patch("/:idCategoria", async (req, res, next) => {
     try{
         const reqBody = req.body
-        const id = req.params.id
+        const id = req.params.idCategoria
         const data = Object.assign(
             {},
             {id: id},
@@ -50,10 +64,10 @@ router.patch("/:id", async (req, res, next) => {
     }
 })
 
-//Apagar uma categoria por #id
-router.delete("/:id", async (req, res, next) => {
+//Apagar uma categoria por #idCategoria
+router.delete("/:idCategoria", async (req, res, next) => {
     try {
-        const id = req.params.id
+        const id = req.params.idCategoria
         const categoria = new Categoria({id: id})
         await categoria.delete()
         res.status(200)

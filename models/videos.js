@@ -1,7 +1,7 @@
 const Table = require("../infrastructure/tables/videoTable")
 const InvalidData = require("./errors/InvalidData")
 const MissingData = require("./errors/MissingData")
-const NotFound = require("./errors/NotFound")
+const VideoNotFound = require("./errors/VideoNotFound")
 
 class Video {
     constructor({id, titulo, descricao, url, categoria_id}) {
@@ -13,7 +13,6 @@ class Video {
     }
 
     async create() {
-        this.validate()
         const newVideo = await Table.create({
             titulo: this.titulo,
             descricao: this.descricao,
@@ -26,6 +25,27 @@ class Video {
         this.updatedAt = newVideo.updatedAt        
 
         return newVideo
+    }
+
+    async findOne() {
+        const video = await Table.findOne(
+            {
+                where: {
+                    categoria_id: this.categoria_id,
+                    id: this.id
+                }
+            }
+        )
+
+        if(!video) {
+            throw new VideoNotFound(this.id)
+        } else {
+            this.url = video.url
+            this.titulo = video.titulo
+            this.descricao = video.descricao
+            
+            return video
+        }
     }
 
     async update() {
@@ -44,22 +64,71 @@ class Video {
         return data
     }
 
-    async findOne() {
-        const videoFromTable = await Table.findOne(
+    async load() {
+        const loadedFromTable = await Table.findOne(
             {
                 where: {
-                    categoria_id: this.categoria_id,
-                    id: this.id
+                    id: this.id,
+                    categoria_id: this.categoria_id
                 }
             }
         )
 
-        if(!videoFromTable) {
+        if(!loadedFromTable) {
             throw new NotFound(this.id)
-        }
+        } else {
+            this.titulo = loadedFromTable.titulo
+            this.descricao = loadedFromTable.descricao
+            this.url = loadedFromTable.url
 
+            return loadedFromTable
+        }
+    } 
+
+    async delete() {
+        await Table.destroy(
+            {
+                where: {
+                    id: this.id,
+                    categoria_id: this.categoria_id
+                }
+            }
+        )
     }
 
+    async loadQuery() {
+        const videos = await Table.findAll(
+            {
+                where: {
+                    titulo: this.titulo
+                }
+            }
+        )
+
+        if(!videos || Object.keys(videos).length < 1) {
+            throw new VideoNotFound()
+        } else {
+            const foundVideos = []
+
+            videos.forEach(item => {
+                foundVideos.push(
+                    {
+                        video: {
+                            id: item.id,
+                            categoria_id: item.categoria_id,
+                            titulo: item.titulo,
+                            descricao: item.descricao,
+                            url: item.url,
+                        }
+                    }
+                )
+            })
+
+            console.log(foundVideos)
+
+            return foundVideos
+        }
+    }
 }
 
 module.exports = Video

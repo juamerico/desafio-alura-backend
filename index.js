@@ -6,7 +6,27 @@ app.use(express.json())
 const categoryRouter = require("./controllers/categorias")
 const InvalidData = require("./models/errors/InvalidData")
 const MissingData = require("./models/errors/MissingData")
-const NotFound = require("./models/errors/NotFound")
+const NotFound = require("./models/errors/CategoryNotFound")
+const Video = require("./models/videos")
+
+//Busca vídeo por título (query params)
+app.get("/videos", async (req, res, next) => {
+    try {
+        const video = new Video(
+            {
+                titulo: req.query.search
+            }
+        )
+        const foundVideos = await video.loadQuery()
+        res.status(200)
+        res.send(
+            JSON.stringify(foundVideos)
+        )
+        
+    } catch(err) {
+        next(err)
+    }
+})
 
 app.use("/api/categorias", categoryRouter)
 

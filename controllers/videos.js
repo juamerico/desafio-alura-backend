@@ -4,7 +4,7 @@ const router = require("express").Router({mergeParams: true})
 const Table = require("../infrastructure/tables/videoTable")
 const Video = require("../models/videos")
 
-//Criar novo vídeo a partir da #categoria
+//Criar novo vídeo a partir da #idCategoria
 router.post("/", async (req, res, next) => {
     try {
         const video = new Video(
@@ -25,7 +25,7 @@ router.post("/", async (req, res, next) => {
     }
 })
 
-//Exibir vídeos por categoria
+//Exibir todos os vídeos da #idCategoria
 router.get("/", async (req, res, next) => {
     try{
         const videos = await Table.findAll(
@@ -44,13 +44,15 @@ router.get("/", async (req, res, next) => {
     }
 })
 
-//Exibir vídeo por id
+//Exibir vídeo por #idVideo
 router.get("/:idVideo", async (req, res, next) => {
     try {
-        const video = new Video({
-            id: req.params.idVideo,
-            categoria_id: req.categoria.id
-        })
+        const video = new Video(
+            {
+                id: req.params.idVideo,
+                categoria_id: req.categoria.id
+            }
+        )
         await video.findOne()
         res.status(200)
         res.send(
@@ -62,7 +64,7 @@ router.get("/:idVideo", async (req, res, next) => {
     }
 })
 
-//Atualizar vídeo por #id
+//Atualizar vídeo por #idVideo
 router.patch("/:idVideo", async (req, res, next) => {
     try {
         const video = new Video(
@@ -78,6 +80,27 @@ router.patch("/:idVideo", async (req, res, next) => {
             JSON.stringify(newVideo)
         )
     
+    } catch(err) {
+        next(err)
+    }
+})
+
+//Apagar um vídeo por #idVideo
+router.delete("/:idVideo", async (req, res, next) => {
+    try {
+        const video = new Video(
+            {
+                id: req.params.idVideo,
+                categoria_id: req.categoria.id
+            }
+        )
+        await video.load()
+        await video.delete()
+        res.status(200)
+        res.send(
+            JSON.stringify(video)
+        )
+
     } catch(err) {
         next(err)
     }

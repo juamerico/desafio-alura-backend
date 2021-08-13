@@ -1,27 +1,13 @@
 const Table = require("../infrastructure/tables/categoryTable")
 const InvalidData = require("./errors/InvalidData")
 const MissingData = require("./errors/MissingData")
-const NotFound = require("./errors/NotFound")
+const NotFound = require("./errors/CategoryNotFound")
 
 class Categoria {
     constructor({id, categoria, cor}) {
         this.id = id
         this.categoria = categoria
         this.cor = cor
-    }
-
-    async load() {
-        const loadedFromTable = await Table.findOne({where: {id: this.id}})
-
-        if(!loadedFromTable) {
-            throw new NotFound(this.id)
-        } else {
-            this.categoria = loadedFromTable.categoria
-            this.cor = loadedFromTable.cor
-
-            return loadedFromTable
-        }
-
     }
 
     async create() {
@@ -36,6 +22,20 @@ class Categoria {
         this.id = newCategory.id
 
         return newCategory
+    }
+
+    async load() {
+        const loadedFromTable = await Table.findOne({where: {id: this.id}})
+
+        if(!loadedFromTable) {
+            throw new NotFound(this.id)
+        } else {
+            this.categoria = loadedFromTable.categoria
+            this.cor = loadedFromTable.cor
+
+            return loadedFromTable
+        }
+
     }
 
     async update() {
