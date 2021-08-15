@@ -3,16 +3,26 @@
 const Categoria = require("../models/categorias")
 const router = require("express").Router()
 const Table = require("../infrastructure/tables/categoryTable")
+const MissingData = require("../models/errors/MissingData")
 
 //Criar nova categoria
 router.post("/", async (req, res, next) => {
     try {
-        const categoria = new Categoria(req.body)
-        const createdCategory = await categoria.create()
-        res.status(201)
-        res.send(
-            `Categoria criada: ${JSON.stringify(createdCategory)}`
+        const categoria = new Categoria(
+            {
+                categoria: req.body.categoria,
+                cor: req.body.cor
+            }
         )
+        if(Object.keys(req.body).length < 1) {
+            throw new MissingData("")
+        } else {
+            const novaCategoria = await categoria.create()
+            res.status(201)
+            res.send(
+                JSON.stringify(novaCategoria)
+            )
+        }
 
     } catch(err) {
         next(err)
@@ -32,10 +42,10 @@ router.get("/", async (req, res) => {
 router.get("/:idCategoria", async (req, res, next) => {
     try {
         const categoria = new Categoria({id: req.params.idCategoria})
-        await categoria.load()
+        const loadedCategoria = await categoria.load()
         res.status(200)
         res.send(
-            JSON.stringify(categoria)
+            JSON.stringify(loadedCategoria)
         )
     } catch(err) {
         next(err)
@@ -45,19 +55,33 @@ router.get("/:idCategoria", async (req, res, next) => {
 //Editar uma categoria por #idCategoria
 router.patch("/:idCategoria", async (req, res, next) => {
     try{
-        const reqBody = req.body
-        const id = req.params.idCategoria
-        const data = Object.assign(
-            {},
-            {id: id},
-            reqBody
-        )
-        const categoria = new Categoria(data)
-        await categoria.update()
-        res.status(201)
-        res.send(
-            `Dados atualizados: ${JSON.stringify(categoria)}`
-        )
+        if(Object.keys(req.body).length < 1) {
+            throw new MissingData("")
+        } else {
+            const category = new Categoria(
+                Object.assign(
+                    {},
+                    req.body,
+                    {id: req.params.idCategoria}
+                )
+            )
+
+            // let reqBody = req.body
+            
+            // if(Object.keys(req.body).length >= 2) {
+            //     reqBody = {categoria: req.body.categoria, cor: req.body.cor}
+            // } else if(!Object.keys(req.body).cor) {
+            //     reqBody = {categoria: req.body.categoria}
+            // } else if(!Object.keys(req.body).categoria) {
+            //     reqBody = {cor: req.body.cor}
+            // }
+
+            const updatedCategory = await category.update()
+            res.status(200)
+            res.send(
+                JSON.stringify(updatedCategory)
+            )
+        }
 
     } catch(err) {
         next(err)

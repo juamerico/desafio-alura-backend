@@ -35,3 +35,92 @@ A biblioteca [Consign](https://www.npmjs.com/package/consign) é utilizada para 
 #### MySQL
 <sup>desafio-alura-backend/infrastructure/[dbConnection.js](https://github.com/juamerico/desafio-alura-backend/blob/main/infrastructure/dbConnection.js)</sup>\
 O Banco de Dados da aplicação é baseado em [MySQL](https://www.npmjs.com/package/mysql).
+
+
+
+
+
+
+
+# POST api/categorias
+## Criando uma nova categoria
+Crie uma nova categoria enviando uma requisição **POST** contendo os campos `categoria` e `cor`. Ambas são obrigatórias. Após o envio, receberá como resposta um JSON contendo as informações da categoria criada.
+
+#### Informações contidas no objeto de resposta
+- id
+- categoria
+- cor
+- updatedAt
+- createdAt
+
+#### Resposta no caso de erro
+##### Campo não preenchido
+Caso algum dos campos obrigatórios `categoria` e/ou `cor` não forem preenchidos, receberá uma mensagem de erro **{"error":"Campo(s) 'categoria' não informado(s)."}**.
+
+##### Formato inválido
+Caso algum dos campos obrigatórios `categoria` e/ou `cor` não sejam enviados no formado aceito *string*, receberá uma mensagem de erro **{"error":"Campo 'categoria' inválido. Deve ser do tipo 'string'"}**.
+
+##### Envio de requisição com corpo vazio
+Se a requisição for enviada sem nenhum parâmetro, receberá a mensagem de erro: **{"error":"Campo(s) não informado(s)."}**.
+
+
+# GET api/categorias
+## Exibindo todas as categorias
+Envie uma requisição **GET** para receber uma lista contendo todas as categorias criadas em formato JSON.
+
+#### Informações contidas no objeto de resposta
+Lista de objetos contendo as seguintes informações de cada item:
+- id
+- categoria
+- cor
+- updatedAt
+- createdAt
+
+# GET api/categorias/{idCategoria}
+## Exibindo uma categoria
+Envie uma requisição **GET** utilizando o número do `id` como parâmetro da requisição `{idCategoria}` para receber um JSON com as informações da categoria a que o `id` pertence.
+
+#### Informações contidas no objeto de resposta:
+- id
+- categoria
+- cor
+- updatedAt
+- createdAt
+
+#### Resposta no caso de erro
+Caso informe um `id` inexistente no banco de dados, receberá a mensagem de erro: **{"error":"Categoria #*{idCategoria}* não encontrada."}**.
+
+
+
+# PATCH api/categorias/{idCategoria}
+## Editando informações em uma categoria
+Envie uma requisição **PATCH** utilizando o número do `id` como parâmetro da requisição `{idCategoria}`, e informe no corpo da requisição os parâmetros que deseja alterar. Os parâmetros aceitos são `categoria` e/ou `cor`. Após o envio, receberá como resposta um JSON contendo as informações atualizadas da categoria editada.
+
+#### Informações contidas no objeto de resposta
+- id
+- categoria
+- cor
+- updatedAt
+- createdAt
+
+#### Resposta em caso de erro
+##### Campo não preenchido
+Caso algum dos campos obrigatórios `categoria` e/ou `cor` não forem preenchidos, receberá uma mensagem de erro **{"error":"Campo(s) 'categoria' não informado(s)."}**.
+
+##### Formato inválido
+Caso algum dos campos obrigatórios `categoria` e/ou `cor` não sejam enviados no formado aceito *string*, receberá uma mensagem de erro **{"error":"Campo 'categoria' inválido. Deve ser do tipo 'string'"}**.
+
+##### Envio de requisição com corpo vazio
+Se a requisição for enviada sem nenhum parâmetro, receberá a mensagem de erro: **{"error":"Campo(s) não informado(s)."}**.
+
+
+
+DELETE api/categorias/{idCategoria}
+## Excluindo uma categoria
+Envie uma requisição **DELETE** utilizando o número do `id` como parâmetro da requisição `{idCategoria}` para excluir a categoria a que o `id` se refere.
+
+#### Informações contidas no objeto de resposta
+Mensagem informando o número do `id` do objeto que foi excluído do banco de dados.
+
+POST api/categorias/{idCategoria}/videos
+

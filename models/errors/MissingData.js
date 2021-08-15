@@ -1,6 +1,6 @@
 class MissingData extends Error {
     constructor(field) {
-        super(`Campo '${field}' não informado.`)
+        super(`Campo(s) ${field} não informado(s).`)
         this.name = "MissingData"
     }
 }

@@ -8,9 +8,11 @@ const InvalidData = require("./models/errors/InvalidData")
 const MissingData = require("./models/errors/MissingData")
 const NotFound = require("./models/errors/CategoryNotFound")
 const Video = require("./models/videos")
+const CategoryNotFound = require("./models/errors/CategoryNotFound")
+const VideoNotFound = require("./models/errors/VideoNotFound")
 
 //Busca vídeo por título (query params)
-app.get("/videos", async (req, res, next) => {
+app.get("/api/videos", async (req, res, next) => {
     try {
         const video = new Video(
             {
@@ -37,7 +39,7 @@ app.use((err, req, res, next) => {
         status = 400
     }
 
-    if(err instanceof NotFound) {
+    if(err instanceof NotFound || err instanceof CategoryNotFound || err instanceof VideoNotFound) {
         status = 404
     }
 

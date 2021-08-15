@@ -11,7 +11,7 @@ class Categoria {
     }
 
     async create() {
-        this.validate()
+        await this.validate()
         const newCategory = await Table.create({
             categoria: this.categoria,
             cor: this.cor
@@ -27,23 +27,35 @@ class Categoria {
     async load() {
         const loadedFromTable = await Table.findOne({where: {id: this.id}})
 
-        if(!loadedFromTable) {
+        if(Object.keys(loadedFromTable).length === 0) {
             throw new NotFound(this.id)
         } else {
             this.categoria = loadedFromTable.categoria
             this.cor = loadedFromTable.cor
-
+    
             return loadedFromTable
         }
-
     }
 
     async update() {
-        await this.validate()
-        const data = {cor: this.cor, categoria: this.categoria}
-        const updatedCategory = await Table.update(data, {where: {id: this.id}})
+        await Table.findOne({where: {id: this.id}})
+        const fields = ["categoria", "cor"]
+        const newData = {}
 
-        return updatedCategory
+        fields.forEach(field => {
+            const data = this[field]
+            if(data.length < 1) {
+                throw new MissingData(field)
+            } else if(typeof data !== "string") {
+                throw new InvalidData(data, "string")
+            } else {
+                newData[field] = data
+            }
+        })
+
+        await Table.update(newData, {where: {id: this.id}})
+
+        return await Table.findOne({where: {id: this.id}})
     }
 
     async delete() {
@@ -57,13 +69,13 @@ class Categoria {
         const fields = ["categoria", "cor"]
 
         fields.forEach(field =>  {
-            const value = this[field]
-            console.log(field)
-            if(!value || value.length < 1) {
+            let data = this[field]
+
+            if(!data || data.value === "") {
                 throw new MissingData(field)
             }
-
-            if(typeof value !== "string") {
+            
+            if(typeof data !== "string") {
                 throw new InvalidData(field, "string")
             }
         })
