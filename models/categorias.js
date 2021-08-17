@@ -27,7 +27,7 @@ class Categoria {
     async load() {
         const loadedFromTable = await Table.findOne({where: {id: this.id}})
 
-        if(Object.keys(loadedFromTable).length === 0) {
+        if(!loadedFromTable) {
             throw new NotFound(this.id)
         } else {
             this.categoria = loadedFromTable.categoria
@@ -38,20 +38,15 @@ class Categoria {
     }
 
     async update() {
-        await Table.findOne({where: {id: this.id}})
-        const fields = ["categoria", "cor"]
         const newData = {}
 
-        fields.forEach(field => {
-            const data = this[field]
-            if(data.length < 1) {
-                throw new MissingData(field)
-            } else if(typeof data !== "string") {
-                throw new InvalidData(data, "string")
-            } else {
-                newData[field] = data
-            }
-        })
+        if(typeof this.categoria === "string") {
+            newData.categoria = this.categoria
+        }
+        
+        if(typeof this.cor === "string") {
+            newData.cor = this.cor
+        }
 
         await Table.update(newData, {where: {id: this.id}})
 
@@ -59,10 +54,8 @@ class Categoria {
     }
 
     async delete() {
-        const deletedCategory = await this.load()
-        Table.destroy({where: {id: this.id}})
-
-        return deletedCategory
+        await this.load()
+        return Table.destroy({where: {id: this.id}})
     }
 
     validate() {

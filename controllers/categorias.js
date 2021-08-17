@@ -4,6 +4,7 @@ const Categoria = require("../models/categorias")
 const router = require("express").Router()
 const Table = require("../infrastructure/tables/categoryTable")
 const MissingData = require("../models/errors/MissingData")
+const CategoryNotFound = require("../models/errors/CategoryNotFound")
 
 //Criar nova categoria
 router.post("/", async (req, res, next) => {
@@ -29,13 +30,54 @@ router.post("/", async (req, res, next) => {
     }
 })
 
-//Exibir todas as categorias
-router.get("/", async (req, res) => {
-    const categorias = await Table.findAll({raw: true})
-    res.status(200)
-    res.send(
-        JSON.stringify(categorias)
-    )
+//Exibir todas as categorias - com paginação
+router.get("/", async (req, res, next) => {
+    try {
+        if(Object.keys(req.query).length === 0) {
+            const categories = await Table.findAll({raw: true})
+            if(categories.length < 1) {
+                throw new CategoryNotFound("")
+            } else {
+                res.status(200)
+                res.send(
+                    JSON.stringify(categories)
+                )
+            }
+        } else {
+            const categories = await Table.findAll({raw: true})
+            if(categories.length < 1) {
+                throw new CategoryNotFound("")
+            } else {
+                const page = parseInt(req.query.page)
+                const limit = 5
+            
+                const startIndex = (page - 1) * limit
+                const endIndex = page * limit
+            
+                const results = {}
+            
+                if (endIndex < categories.length) {
+                    results.next = {
+                        page: page + 1
+                    }
+                }
+            
+                if(startIndex > 0) {
+                    results.previous = {
+                        page: page - 1
+                    }
+                }
+            
+                results.current = {page: page}
+                results.results = categories.slice(startIndex, endIndex)
+                
+                res.send(results)
+            }        
+        }
+
+    } catch(err) {
+        next(err)
+    }
 })
 
 //Exibir uma categoria por #idCategoria
@@ -65,17 +107,6 @@ router.patch("/:idCategoria", async (req, res, next) => {
                     {id: req.params.idCategoria}
                 )
             )
-
-            // let reqBody = req.body
-            
-            // if(Object.keys(req.body).length >= 2) {
-            //     reqBody = {categoria: req.body.categoria, cor: req.body.cor}
-            // } else if(!Object.keys(req.body).cor) {
-            //     reqBody = {categoria: req.body.categoria}
-            // } else if(!Object.keys(req.body).categoria) {
-            //     reqBody = {cor: req.body.cor}
-            // }
-
             const updatedCategory = await category.update()
             res.status(200)
             res.send(
@@ -91,12 +122,11 @@ router.patch("/:idCategoria", async (req, res, next) => {
 //Apagar uma categoria por #idCategoria
 router.delete("/:idCategoria", async (req, res, next) => {
     try {
-        const id = req.params.idCategoria
-        const categoria = new Categoria({id: id})
+        const categoria = new Categoria({id: req.params.idCategoria})
         await categoria.delete()
         res.status(200)
         res.send(
-            `Categoria id #${id} removida.`
+            `Categoria id #${req.params.idCategoria} removida.`
         )
 
     } catch(err) {

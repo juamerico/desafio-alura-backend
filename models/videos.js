@@ -4,15 +4,18 @@ const MissingData = require("./errors/MissingData")
 const VideoNotFound = require("./errors/VideoNotFound")
 
 class Video {
-    constructor({id, titulo, descricao, url, categoria_id}) {
+    constructor({id, titulo, descricao, url, categoria_id, createdAt, updatedAt}) {
         this.id = id
         this.titulo = titulo
         this.descricao = descricao
         this.url = url
         this.categoria_id = categoria_id
+        this.createdAt = createdAt
+        this.updatedAt = updatedAt
     }
 
     async create() {
+        this.validate()
         const newVideo = await Table.create({
             titulo: this.titulo,
             descricao: this.descricao,
@@ -43,25 +46,31 @@ class Video {
             this.url = video.url
             this.titulo = video.titulo
             this.descricao = video.descricao
+            this.createdAt = video.createdAt
+            this.updatedAt = video.updatedAt
             
             return video
         }
     }
 
     async update() {
-        this.findOne()
+        const newData = {}
 
-        const data = {
-            url: this.url,
-            descricao: this.descricao,
-            titulo: this.titulo
+        if(typeof this.titulo === "string") {
+            newData.titulo = this.titulo
         }
-        await Table.update(
-            data,
-            {where: {id: this.id, categoria_id: this.categoria_id}}
-        )
 
-        return data
+        if(typeof this.descricao === "string") {
+            newData.descricao = this.descricao
+        }
+
+        if(typeof this.url === "string") {
+            newData.url = this.url
+        }
+
+        await Table.update(newData, {where: {id: this.id, categoria_id: this.categoria_id}})
+        
+        return await this.load()
     }
 
     async load() {
@@ -75,7 +84,7 @@ class Video {
         )
 
         if(!loadedFromTable) {
-            throw new NotFound(this.id)
+            throw new VideoNotFound(this.id)
         } else {
             this.titulo = loadedFromTable.titulo
             this.descricao = loadedFromTable.descricao
@@ -86,7 +95,8 @@ class Video {
     } 
 
     async delete() {
-        await Table.destroy(
+        await this.load()
+        Table.destroy(
             {
                 where: {
                     id: this.id,
@@ -96,38 +106,24 @@ class Video {
         )
     }
 
-    async loadQuery() {
-        const videos = await Table.findAll(
-            {
-                where: {
-                    titulo: this.titulo
-                }
+    validate() {
+        const fields = ["titulo", "url", "descricao"]
+
+        fields.forEach(field => {
+            if(this[field].length < 1) {
+                throw new MissingData(field)
+            } else if(typeof this[field] !== "string") {
+                throw new InvalidData(field, "string")
             }
-        )
+        })
+    
+        // if(this.url.length < 1) {
+        //     throw new MissingData("url")
+        // }
 
-        if(!videos || Object.keys(videos).length < 1) {
-            throw new VideoNotFound()
-        } else {
-            const foundVideos = []
-
-            videos.forEach(item => {
-                foundVideos.push(
-                    {
-                        video: {
-                            id: item.id,
-                            categoria_id: item.categoria_id,
-                            titulo: item.titulo,
-                            descricao: item.descricao,
-                            url: item.url,
-                        }
-                    }
-                )
-            })
-
-            console.log(foundVideos)
-
-            return foundVideos
-        }
+        // if(this.descricao.length < 1) {
+        //     throw new MissingData("descricao")
+        // }
     }
 }
 

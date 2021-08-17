@@ -1,6 +1,6 @@
 class VideoNotFound extends Error {
-    constructor() {
-        super(`Video não encontrado.`)
+    constructor(id) {
+        super(`Video #${id} não encontrado.`)
         this.name = "VideoNotFound"
     }
 }

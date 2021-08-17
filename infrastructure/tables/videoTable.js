@@ -4,7 +4,12 @@ const instance = require("../dbConnection")
 const columns = {
     titulo: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: "Campo título não pode estar vazio"
+            }
+        }
     },
     descricao: {
         type: Sequelize.STRING,
