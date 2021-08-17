@@ -1,3 +1,5 @@
+# https://aluraflixapi.herokuapp.com/api/categorias
+
 # https://documenter.getpostman.com/view/16743677/Tzz8sd5R
 
 # POST api/categorias
