@@ -1,8 +1,8 @@
 {
     "mysql": {
-        "db": "Aluraflix",
-        "user": "root",
-        "password": "admin",
-        "host": "127.0.0.1"
+        "db": "d8v6lfvxjgxnf7xj",
+        "user": "mwylsvcbcj026b7z",
+        "password": "r3fx1aihazlrdne4",
+        "host": "kfgk8u2ogtoylkq9.cbetxkdyhwsb.us-east-1.rds.amazonaws.com"
     }
 }
