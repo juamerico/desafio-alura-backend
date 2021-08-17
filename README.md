@@ -1,6 +1,11 @@
-# https://aluraflixapi.herokuapp.com/api/categorias
+# Desafio Back End - Alura Dev
 
-# https://documenter.getpostman.com/view/16743677/Tzz8sd5R
+## https://aluraflixapi.herokuapp.com/api/categorias
+
+## https://documenter.getpostman.com/view/16743677/Tzz8sd5R
+
+## Objetivo
+Projeto desenvolvido durante o Alura Challenges - Back End, com a proposta de criação de uma API seguindo o padrão REST para o recebimento de requisições e armazenamento de informações referentes aos vídeos da plataforma [Aluraflix](https://github.com/alura-cursos/aluraflix-front/tree/semana-1).
 
 # POST api/categorias
 ## Criando uma nova categoria
