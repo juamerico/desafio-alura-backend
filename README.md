@@ -1,3 +1,5 @@
+# https://documenter.getpostman.com/view/16743677/Tzz8sd5R
+
 # POST api/categorias
 ## Criando uma nova categoria
 Crie uma nova categoria enviando uma requisição **POST** contendo os campos `categoria` e `cor`. Ambos são obrigatórios. Após o envio, receberá como resposta um JSON contendo as informações da categoria criada.
@@ -240,5 +242,3 @@ Lista de objetos contendo as seguintes informações de cada item:
 
 #### Resposta no caso de erro
 Caso o banco de dados não contenha nenhum vídeo, receberá uma mensagem de erro: **{"error":"Categoria #*{idCategoria}* não encontrada."}**
-\
-https://www.getpostman.com/collections/b30edf5c1d0a89d089ab
