@@ -1,15 +1,14 @@
+require("dotenv").config()
 const Sequelize = require("sequelize")
-const config = require("config")
 
 const instance = new Sequelize(
-    config.get("mysql.db"),
-    config.get("mysql.user"),
-    config.get("mysql.password"),
+    process.env.JAWS_DATABASE,
+    process.env.JAWS_USER,
+    process.env.JAWS_PASS,
     {
-        host: config.get("mysql.host"),
+        host: process.env.JAWS_HOST,
         dialect: "mysql"
     }
 )
 
 module.exports = instance
-

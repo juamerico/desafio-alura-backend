@@ -116,14 +116,6 @@ class Video {
                 throw new InvalidData(field, "string")
             }
         })
-    
-        // if(this.url.length < 1) {
-        //     throw new MissingData("url")
-        // }
-
-        // if(this.descricao.length < 1) {
-        //     throw new MissingData("descricao")
-        // }
     }
 }
 
