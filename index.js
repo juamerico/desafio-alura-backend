@@ -23,9 +23,7 @@ app.get("/api/videos", async (req, res, next) => {
             })
             if(video.length > 0) {
                 res.status(200)
-                res.send(
-                    JSON.stringify(video)
-                )
+                res.json(video)
             } else {
                 throw new VideoNotFound(req.query.search)
             }
@@ -52,7 +50,7 @@ app.use((err, req, res, next) => {
     }
 
     res.status(status)
-    res.send(JSON.stringify({error: err.message}))
+    res.json({error: err.message})
     console.log(err.message)
 })
 
