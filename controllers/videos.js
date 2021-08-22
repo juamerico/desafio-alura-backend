@@ -21,9 +21,7 @@ router.post("/", async (req, res, next) => {
             )
             await video.create()
             res.status(201)
-            res.send(
-                JSON.stringify(video)
-            )
+            res.json(video)
         }
 
     } catch(err) {
@@ -72,7 +70,7 @@ router.get("/", async (req, res, next) => {
                 results.current = {page: page}
                 results.results = videos.slice(startIndex, endIndex)
                 
-                res.send(results)
+                res.json(results)
             }        
         }
 
@@ -92,9 +90,7 @@ router.get("/:idVideo", async (req, res, next) => {
         )
         await video.findOne()
         res.status(200)
-        res.send(
-            JSON.stringify(video)
-        )
+        res.json(video)
         
     } catch(err) {
         next(err)
@@ -116,9 +112,7 @@ router.patch("/:idVideo", async (req, res, next) => {
                 ))
             const newVideo = await video.update()
             res.status(200)
-            res.send(
-                JSON.stringify(newVideo)
-            )
+            res.json(newVideo)
         }
     
     } catch(err) {
@@ -138,7 +132,7 @@ router.delete("/:idVideo", async (req, res, next) => {
         await video.load()
         await video.delete()
         res.status(200)
-        res.send(
+        res.json(
             `Vídeo id #${req.params.idVideo} removido.`
         )
 

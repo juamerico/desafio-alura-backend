@@ -20,9 +20,7 @@ router.post("/", async (req, res, next) => {
         } else {
             const novaCategoria = await categoria.create()
             res.status(201)
-            res.send(
-                JSON.stringify(novaCategoria)
-            )
+            res.json(novaCategoria)
         }
 
     } catch(err) {
@@ -39,9 +37,7 @@ router.get("/", async (req, res, next) => {
                 throw new CategoryNotFound("")
             } else {
                 res.status(200)
-                res.send(
-                    JSON.stringify(categories)
-                )
+                res.json(categories)
             }
         } else {
             const categories = await Table.findAll({raw: true})
@@ -86,9 +82,7 @@ router.get("/:idCategoria", async (req, res, next) => {
         const categoria = new Categoria({id: req.params.idCategoria})
         const loadedCategoria = await categoria.load()
         res.status(200)
-        res.send(
-            JSON.stringify(loadedCategoria)
-        )
+        res.json(loadedCategoria)
     } catch(err) {
         next(err)
     }
@@ -109,9 +103,7 @@ router.patch("/:idCategoria", async (req, res, next) => {
             )
             const updatedCategory = await category.update()
             res.status(200)
-            res.send(
-                JSON.stringify(updatedCategory)
-            )
+            res.json(updatedCategory)
         }
 
     } catch(err) {
@@ -125,7 +117,7 @@ router.delete("/:idCategoria", async (req, res, next) => {
         const categoria = new Categoria({id: req.params.idCategoria})
         await categoria.delete()
         res.status(200)
-        res.send(
+        res.json(
             `Categoria id #${req.params.idCategoria} removida.`
         )
 

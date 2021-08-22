@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run create-tables && node index.js",
+    "dev": "nodemon .",
     "create-tables": "node ./infrastructure/createTables.js"
   },
   "repository": {
