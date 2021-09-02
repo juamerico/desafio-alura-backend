@@ -3,8 +3,7 @@
 const Categoria = require("../models/categorias")
 const router = require("express").Router()
 const Table = require("../infrastructure/tables/categoryTable")
-const MissingData = require("../models/errors/MissingData")
-const CategoryNotFound = require("../models/errors/CategoryNotFound")
+const {MissingData, CategoryNotFound} = require("../models/errors")
 
 //Criar nova categoria
 router.post("/", async (req, res, next) => {

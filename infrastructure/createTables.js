@@ -1,6 +1,7 @@
 const Tables = [
     require("./tables/categoryTable"),
-    require("./tables/videoTable")
+    require("./tables/videoTable"),
+    require("./tables/userTable")
 ]
 
 async function createTables() {

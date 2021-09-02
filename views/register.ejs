@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jgthms/minireset.css@master/minireset.min.css">
+    <link rel="stylesheet" href="/public/assets/style.css">
+    <title>Register</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Criar uma conta</h1>
+        <form class="form" method="POST" action="/usuarios/register">
+            <div class="username">
+                <label for="username">Nome</label>
+                <input type="text" id="username" name="username" placeholder="Digite seu nome"/>
+            </div>
+            <div class="email">
+                <label for="email">E-mail</label>
+                <input type="text" id="email" name="email" placeholder="Digite seu email"/>
+            </div>
+            <div class="passwordInput">
+                <label for="passwordInput">Senha</label>
+                <input type="password" id="passwordInput" name="passwordInput" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" placeholder="Digite uma senha"/>
+            </div>
+            <div class="passwordConfirm">
+                <label for="passwordConfirm">Confirme a senha</label>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="Confirme a senha"/>
+                <span class="error typeMismatch">As senhas precisam ser iguais</span>
+            </div>
+            <div class="button">
+                <input type="submit" name="submit" id="submit" value="Criar conta">
+            </div>
+        </form>
+        <a href="/usuarios/login">Já tem uma conta?</a>
+    </div>
+</body>
+</html>

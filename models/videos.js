@@ -1,7 +1,5 @@
 const Table = require("../infrastructure/tables/videoTable")
-const InvalidData = require("./errors/InvalidData")
-const MissingData = require("./errors/MissingData")
-const VideoNotFound = require("./errors/VideoNotFound")
+const {InvalidData, MissingData, VideoNotFound} = require("./errors")
 
 class Video {
     constructor({id, titulo, descricao, url, categoria_id, createdAt, updatedAt}) {

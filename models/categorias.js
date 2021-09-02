@@ -1,7 +1,5 @@
 const Table = require("../infrastructure/tables/categoryTable")
-const InvalidData = require("./errors/InvalidData")
-const MissingData = require("./errors/MissingData")
-const NotFound = require("./errors/CategoryNotFound")
+const {InvalidData, MissingData, CategoryNotFound} = require("./errors")
 
 class Categoria {
     constructor({id, categoria, cor}) {
@@ -28,7 +26,7 @@ class Categoria {
         const loadedFromTable = await Table.findOne({where: {id: this.id}})
 
         if(!loadedFromTable) {
-            throw new NotFound(this.id)
+            throw new CategoryNotFound()
         } else {
             this.categoria = loadedFromTable.categoria
             this.cor = loadedFromTable.cor

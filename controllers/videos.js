@@ -2,8 +2,7 @@
 
 const router = require("express").Router({mergeParams: true})
 const Table = require("../infrastructure/tables/videoTable")
-const MissingData = require("../models/errors/MissingData")
-const VideoNotFound = require("../models/errors/VideoNotFound")
+const {MissingData, VideoNotFound} = require("../models/errors")
 const Video = require("../models/videos")
 
 //Criar novo vídeo a partir da #idCategoria

@@ -1,22 +1,33 @@
 const express = require("express")
 const app = express()
 
-//Express
-app.use(express.json())
-
 const categoryRouter = require("./controllers/categorias")
-const InvalidData = require("./models/errors/InvalidData")
-const MissingData = require("./models/errors/MissingData")
-const NotFound = require("./models/errors/CategoryNotFound")
-const CategoryNotFound = require("./models/errors/CategoryNotFound")
-const VideoNotFound = require("./models/errors/VideoNotFound")
+const userRouter = require("./controllers/usuario")
+const {MissingData, CategoryNotFound, VideoNotFound, InvalidData, InvalidPassword} = require("./models/errors")
 const Table = require("./infrastructure/tables/videoTable")
+
+app.use(express.json())
+app.use(express.urlencoded({extended: false}))
+app.set("view engine", "ejs")
+app.use("/public", express.static("public"))
+
+app.use((req, res, next) => {
+    next()
+})
 
 //Busca vídeo por título (query params)
 app.get("/api/videos", async (req, res, next) => {
     try {
         if(Object.keys(req.query).length < 1) {
             throw new MissingData("título")
+        } else if(req.query.search === "all") {
+            const video = await Table.findAll()
+            if(video.length > 0) {
+                res.status(200)
+                res.json(video)
+            } else {
+                throw new VideoNotFound(req.query.search)
+            }
         } else {
             const video = await Table.findAll({
                 where: {titulo: req.query.search}
@@ -34,18 +45,19 @@ app.get("/api/videos", async (req, res, next) => {
     }
 })
 
-//Roteador categorias
+//Roteadores
 app.use("/api/categorias", categoryRouter)
+app.use("/usuarios", userRouter)
 
 //Manipulação de erros
 app.use((err, req, res, next) => {
     let status = 404
 
-    if(err instanceof InvalidData || err instanceof MissingData) {
+    if(err instanceof InvalidData || err instanceof MissingData || err instanceof InvalidPassword) {
         status = 400
     }
 
-    if(err instanceof NotFound || err instanceof CategoryNotFound || err instanceof VideoNotFound) {
+    if(err instanceof CategoryNotFound || err instanceof VideoNotFound) {
         status = 404
     }
 
