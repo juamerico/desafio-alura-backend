@@ -29,13 +29,9 @@ router.post("/login", async (req, res, next) => {
     try {
         const user = new User({
             email: req.body.email,
-            password: req.body.password
+            passwordInput: req.body.passwordInput
         })
         await user.findByEmail()
-        const query = await user.compare()
-        if(!query) {
-            throw new NotAllowed("Senha")
-        }
         res.redirect("/api/videos?search=all")
     } catch(err) {
         next(err)

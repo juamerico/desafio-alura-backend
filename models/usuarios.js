@@ -36,23 +36,23 @@ class Usuario {
     }
 
     async findByEmail() {
-        const query = await Table.findOne({where: {email: this.email}})
+        const query = await Table.findOne({where: {email: this.email}, raw: true})
         console.log(query)
         if(Object.keys(query).length === 0) {
             throw new UserNotFound()
         } else {
             this.id = query.id
             this.username = query.username
-            this.hashedPassword = query.hashedPassword
+            this.hashedPassword = query.password
         }
+
+        await this.compare()
     }
 
     async compare() {
-        if(await bcrypt.compare(this.password, this.hashedPassword)) {
-            return true
-        } else {
+        if(!await bcrypt.compare(this.passwordInput, this.hashedPassword)) {
             throw new InvalidPassword("Senha incorreta")
-        }
+        }    
     }
 }
 
