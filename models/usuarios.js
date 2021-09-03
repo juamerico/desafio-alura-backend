@@ -1,6 +1,7 @@
 const Table = require("../infrastructure/tables/userTable")
 const bcrypt = require("bcrypt")
 const {InvalidPassword, AlreadyInUse, UserNotFound} = require("../models/errors")
+const jwt = require("jsonwebtoken")
 
 class Usuario {
     constructor({id, username, email, passwordInput, passwordConfirm, hashedPassword}) {
@@ -35,9 +36,15 @@ class Usuario {
         this.hashedPassword = hashedPass
     }
 
+    async login() {
+        await this.findByEmail()
+        await this.compare()
+        return await this.jwtSign()
+    }
+
     async findByEmail() {
-        const query = await Table.findOne({where: {email: this.email}, raw: true})
-        console.log(query)
+        const query = await Table.findOne({where: {email: this.email}})
+
         if(Object.keys(query).length === 0) {
             throw new UserNotFound()
         } else {
@@ -45,14 +52,16 @@ class Usuario {
             this.username = query.username
             this.hashedPassword = query.password
         }
-
-        await this.compare()
     }
 
     async compare() {
         if(!await bcrypt.compare(this.passwordInput, this.hashedPassword)) {
             throw new InvalidPassword("Senha incorreta")
-        }    
+        }
+    }
+
+    async jwtSign() {
+        return await jwt.sign({id: this.id}, process.env.JWT_KEY)
     }
 }
 

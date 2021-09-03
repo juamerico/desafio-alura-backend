@@ -31,8 +31,10 @@ router.post("/login", async (req, res, next) => {
             email: req.body.email,
             passwordInput: req.body.passwordInput
         })
-        await user.findByEmail()
-        res.redirect("/api/videos?search=all")
+        const token = await user.login()
+        console.log(token)
+        res.set("Authorization", token)
+        res.end()
     } catch(err) {
         next(err)
     }

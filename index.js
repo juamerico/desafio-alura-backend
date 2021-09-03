@@ -1,5 +1,6 @@
 const express = require("express")
 const app = express()
+const jwt = require("jsonwebtoken")
 
 const categoryRouter = require("./controllers/categorias")
 const userRouter = require("./controllers/usuario")
@@ -16,7 +17,7 @@ app.use((req, res, next) => {
 })
 
 //Busca vídeo por título (query params)
-app.get("/api/videos", async (req, res, next) => {
+app.get("/api/videos", authenticateToken, async (req, res, next) => {
     try {
         if(Object.keys(req.query).length < 1) {
             throw new MissingData("título")
@@ -65,6 +66,19 @@ app.use((err, req, res, next) => {
     res.json({error: err.message})
     console.log(err.message)
 })
+
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers["authorization"]
+    const token = authHeader && authHeader.split(" ")[1]
+
+    if(token == null) res.status(403).redirect("/usuarios/login")
+
+    jwt.verify(token, process.env.JWT_KEY, (err, user) => {
+        if(err) res.status(400).redirect("/usuarios/login")
+        req.user = user
+        next()
+    })
+}
 
 //Server
 const port = process.env.PORT || 4000
